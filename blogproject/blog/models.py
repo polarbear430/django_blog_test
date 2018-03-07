@@ -48,7 +48,8 @@ class Post(models.Model):
 	modified_time = models.DateTimeField()
 
 	excerpt = models.CharField(max_length = 200, blank = True)
-
+	
+	views =  models.PositiveIntegerField(default=0)
 	#一篇文章只能有一个分类-> ForeignKey，
 	#       但可以有多个标签->ManyToManyField
 	category = models.ForeignKey(Category)
@@ -62,6 +63,8 @@ class Post(models.Model):
 
 	def get_absolute_url(self):
 		return reverse('blog:detail', kwargs={'pk':self.pk})
-
+	def increase_views(self):
+		self.views +=1
+		self.save(update_fields=['views'])
 	class Meta:
 		ordering = ['-create_time']
